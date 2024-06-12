@@ -22,6 +22,7 @@ import { NewsArticle } from "../types";
 import { headingBoldColor, itemSeparator } from "@/constants/colots";
 import { Space } from "@/constants/Space";
 import { FontSize } from "@/constants/FontSize";
+import { useNetInfo } from "@react-native-community/netinfo";
 
 const styles = StyleSheet.create({
   headingBold: {
@@ -34,7 +35,7 @@ const styles = StyleSheet.create({
     backgroundColor: itemSeparator,
     height: StyleSheet.hairlineWidth,
   },
-  viewFlex: { flex: 1 }
+  viewFlex: { flex: 1 },
 });
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -47,6 +48,7 @@ export default function NewsPage() {
   const nextArticleIndex = useRef<number>(0);
   const intervalId = useRef<NodeJS.Timeout>();
   const totalResults = useRef<number>(0);
+  const netInfo = useNetInfo();
 
   useEffect(() => {
     intervalId.current = setInterval(() => {
@@ -74,17 +76,22 @@ export default function NewsPage() {
   }, [newsData]);
 
   const fetchNewsArticles = useCallback(() => {
-    fetch(API_URL)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.articles) {
-          storeNewsArticles(data.articles);
-          setNewsData(data.articles.slice(0, 10));
-          totalResults.current = data.totalResults;
-          nextArticleIndex.current = 11;
-        }
-      })
-      .catch((err) => console.log("error", err));
+    if (netInfo.isConnected) {
+      fetch(API_URL)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.articles) {
+            storeNewsArticles(data.articles);
+            setNewsData(data.articles.slice(0, 10));
+            totalResults.current = data.totalResults;
+            nextArticleIndex.current = 11;
+          }
+        })
+        .catch((err) => console.log("error", err));
+    } else {
+      retrieveNewsArticles(nextArticleIndex.current);
+      nextArticleIndex.current = 11;
+    }
   }, []);
 
   useEffect(() => {
