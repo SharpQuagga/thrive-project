@@ -17,7 +17,7 @@ export const retrieveNewsArticles = async (index: number) => {
     const serializedArticles = await AsyncStorage.getItem('newsArticles');
     if (serializedArticles !== null) {
       const data = JSON.parse(serializedArticles)
-      return data.slice(index,index + NEXT_BATCH_LENGTH).filter((data,idx) => data.title !== '[Removed]');
+      return data.slice(index,index + NEXT_BATCH_LENGTH).filter((data,idx) => data.author !== null);
     }
   } catch (error) {
     console.error('Error retrieving news articles:', error);

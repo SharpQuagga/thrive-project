@@ -22,7 +22,7 @@ import { NewsArticle } from "../types";
 import { headingBoldColor, itemSeparator } from "@/constants/colots";
 import { Space } from "@/constants/Space";
 import { FontSize } from "@/constants/FontSize";
-import { useNetInfo } from "@react-native-community/netinfo";
+import NetInfo from "@react-native-community/netinfo";
 
 const styles = StyleSheet.create({
   headingBold: {
@@ -38,7 +38,6 @@ const styles = StyleSheet.create({
   viewFlex: { flex: 1 },
 });
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 let isSplashHidden = false;
@@ -48,7 +47,6 @@ export default function NewsPage() {
   const nextArticleIndex = useRef<number>(0);
   const intervalId = useRef<NodeJS.Timeout>();
   const totalResults = useRef<number>(0);
-  const netInfo = useNetInfo();
 
   useEffect(() => {
     intervalId.current = setInterval(() => {
@@ -75,7 +73,8 @@ export default function NewsPage() {
     }
   }, [newsData]);
 
-  const fetchNewsArticles = useCallback(() => {
+  const fetchNewsArticles = useCallback(async () => {
+    const netInfo = await NetInfo.fetch()
     if (netInfo.isConnected) {
       fetch(API_URL)
         .then((res) => res.json())

@@ -1,50 +1,19 @@
-# Welcome to your Expo app 👋
+# News Feed App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Checkout to master to get the code.
 
-## Get started
+Shows Splash Screen on app launch and renders 10 news items.
+Swipe left on News item to pin it to the top
+Swipe right on News items to delete it from the list.
 
-1. Install dependencies
+Fetches 5 more news articles every 10 seconds.
+Users can fetch more articles by clicking on Get more articles button, which will reset the automatic timer as well.
 
-   ```bash
-   npm install
-   ```
 
-2. Start the app
 
-   ```bash
-    npx expo start
-   ```
+# Steps to run
 
-In the output, you'll find options to open the app in a
+Go to master branch
+run npm install
+run npm run android
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
