@@ -1,0 +1,1 @@
+export const API_URL = 'https://newsapi.org/v2/top-headlines?pageSize=100&language=en&category=general&apiKey=2f619c7e8ed74ea083d1cd818ca0ad0d'
