@@ -1,12 +1,4 @@
-import {
-  View,
-  Text,
-  FlatList,
-  Pressable,
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-} from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { API_URL } from "@/constants/ApiEndpoints";
 import * as SplashScreen from "expo-splash-screen";
@@ -23,6 +15,8 @@ import { headingBoldColor, itemSeparator } from "@/constants/colots";
 import { Space } from "@/constants/Space";
 import { FontSize } from "@/constants/FontSize";
 import NetInfo from "@react-native-community/netinfo";
+import { FlashList } from "@shopify/flash-list";
+import MyLoader from "../Loader";
 
 const styles = StyleSheet.create({
   headingBold: {
@@ -74,7 +68,7 @@ export default function NewsPage() {
   }, [newsData]);
 
   const fetchNewsArticles = useCallback(async () => {
-    const netInfo = await NetInfo.fetch()
+    const netInfo = await NetInfo.fetch();
     if (netInfo.isConnected) {
       fetch(API_URL)
         .then((res) => res.json())
@@ -88,8 +82,11 @@ export default function NewsPage() {
         })
         .catch((err) => console.log("error", err));
     } else {
-      retrieveNewsArticles(nextArticleIndex.current);
-      nextArticleIndex.current = 11;
+      retrieveNewsArticles(nextArticleIndex.current).then((newArticles) => {
+        setNewsData(newArticles);
+        nextArticleIndex.current += NEXT_BATCH_LENGTH;
+      });
+      totalResults.current = 100;
     }
   }, []);
 
@@ -131,10 +128,16 @@ export default function NewsPage() {
         {pinnedArticles && pinnedArticles.length > 0 ? (
           <View style={{ minHeight: 70 }}>
             <Text style={styles.headingBold}>Pinned Articles</Text>
-            <FlatList
+            <FlashList
               data={pinnedArticles}
-              renderItem={({ item }) => <NewsItem item={item} isPinned />}
-              keyExtractor={(item) => item.title}
+              renderItem={({ item }) => (
+                <NewsItem
+                  item={item}
+                  isPinned
+                  deleteArticle={undefined}
+                  pinArticle={undefined}
+                />
+              )}
               ItemSeparatorComponent={() => (
                 <View style={styles.itemSeparator} />
               )}
@@ -145,16 +148,18 @@ export default function NewsPage() {
       {newsData && (
         <View style={styles.viewFlex}>
           <Text style={styles.headingBold}>Latest Articles</Text>
-          <FlatList
+          <FlashList
             data={newsData}
+            estimatedItemSize={100}
+            ListEmptyComponent={<MyLoader/>}
             renderItem={({ item }) => (
               <NewsItem
                 deleteArticle={deleteArticle}
                 pinArticle={pinArticle}
                 item={item}
+                isPinned={false}
               />
             )}
-            keyExtractor={(item) => item.title}
             ItemSeparatorComponent={() => <View style={styles.itemSeparator} />}
           />
         </View>

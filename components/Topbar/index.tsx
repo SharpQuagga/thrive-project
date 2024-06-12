@@ -49,9 +49,6 @@ export default function Topbar(props: Props) {
         <Pressable onPress={props.getMoreArticles} style={styles.button}>
           <Text style={styles.buttonText}>Get More Articles</Text>
         </Pressable>
-        {/* <Pressable style={styles.button}>
-          <Text style={styles.buttonText}>Reset Drip Timer</Text>
-        </Pressable> */}
       </View>
     </>
   );

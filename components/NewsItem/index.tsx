@@ -1,9 +1,8 @@
 import { View, Text, StyleSheet, Image, Animated } from "react-native";
-import React from "react";
+import React, { memo, useMemo } from "react";
 import { NewsArticle } from "../types";
 import {
   GestureHandlerRootView,
-  RectButton,
   Swipeable,
 } from "react-native-gesture-handler";
 import { newsItemBgColor } from "@/constants/colots";
@@ -15,7 +14,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: Space.small,
-    backgroundColor:newsItemBgColor
+    backgroundColor: newsItemBgColor,
   },
   image: {
     width: 100,
@@ -77,24 +76,30 @@ export default function NewsItem(props: Props) {
     deleteArticle && deleteArticle(title);
   };
 
-  const newsArticle = (
-    <View style={styles.newsItem}>
-      <View style={styles.leftItems}>
-        <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
-          {title}
-        </Text>
-        <Text style={styles.description} numberOfLines={3} ellipsizeMode="tail">
-          {description}
-        </Text>
-      </View>
+  const newsArticle = useMemo(() => {
+    return (
+      <View style={styles.newsItem}>
+        <View style={styles.leftItems}>
+          <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
+            {title}
+          </Text>
+          <Text
+            style={styles.description}
+            numberOfLines={3}
+            ellipsizeMode="tail"
+          >
+            {description}
+          </Text>
+        </View>
 
-      <Image
-        source={{ uri: urlToImage }}
-        style={styles.image}
-        resizeMode="contain"
-      />
-    </View>
-  );
+        <Image
+          source={{ uri: urlToImage }}
+          style={styles.image}
+          resizeMode="contain"
+        />
+      </View>
+    );
+  }, []);
 
   if (isPinned) {
     return <>{newsArticle}</>;
