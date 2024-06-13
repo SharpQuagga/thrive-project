@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, FlatList } from "react-native";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { API_URL } from "@/constants/ApiEndpoints";
 import * as SplashScreen from "expo-splash-screen";
@@ -55,7 +55,7 @@ export default function NewsPage() {
           nextArticleIndex.current += NEXT_BATCH_LENGTH;
         });
       }
-    }, 5000);
+    }, 10000);
 
     return () => clearInterval(intervalId.current);
   }, [nextArticleIndex, newsData]);
@@ -115,8 +115,8 @@ export default function NewsPage() {
 
   const pinArticle = useCallback(
     (article: NewsArticle) => {
+      setPinnedArticles([article, ...pinnedArticles]);
       setNewsData(deleteArticlesWithTitle(newsData, article.title));
-      setPinnedArticles([...pinnedArticles, article]);
     },
     [pinnedArticles, newsData]
   );
@@ -128,7 +128,7 @@ export default function NewsPage() {
         {pinnedArticles && pinnedArticles.length > 0 ? (
           <View style={{ minHeight: 70 }}>
             <Text style={styles.headingBold}>Pinned Articles</Text>
-            <FlashList
+            <FlatList
               data={pinnedArticles}
               renderItem={({ item }) => (
                 <NewsItem
