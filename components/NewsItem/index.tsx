@@ -99,7 +99,7 @@ export default function NewsItem(props: Props) {
         />
       </View>
     );
-  }, []);
+  }, [title, description, urlToImage]);
 
   if (isPinned) {
     return <>{newsArticle}</>;
